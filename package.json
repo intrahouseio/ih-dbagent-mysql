@@ -1,0 +1,15 @@
+{
+  "name": "ih-dbagent-influx",
+  "version": "5.0.1",
+  "description": "Dbagent for MySQL, MariaDB",
+  "main": "dbagent.js",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "mocha": "^4.1.0",
+    "should": "^13.2.3"
+  },
+  "author": "INTRA",
+  "license": "MIT"
+}

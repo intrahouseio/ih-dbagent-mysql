@@ -1,0 +1,6 @@
+{
+    "id":"mysql",
+    "description":"Dbagent for MySQL, MariaDB",
+    "cross":true,
+	"version":"5.0.0"
+}
