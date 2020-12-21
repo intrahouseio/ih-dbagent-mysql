@@ -27,7 +27,7 @@
     { "prop": "host", "title": "Host", "type": "input", "default": "localhost" },
     { "prop": "port", "title": "Port", "type": "input", "default": "3306" },
     { "prop": "user", "title": "User", "type": "input", "default": "root" },
-    { "prop": "password", "title": "Password", "type": "input", "default": "intrahousemysql" }
+    { "prop": "password", "title": "Password", "type": "password", "default": "intrahousemysql" }
   ],
   "p3": [
     { "prop": "project_options", "title": "Параметры проекта", "type": "header", "size": "h6" },
