@@ -16,8 +16,8 @@
       "prop": "activateButton",
       "title": "Активировать эту БД для проекта",
       "type": "button",
-      "command": "restartwithdbagent",
-      "param": "",
+      "command": "restart",
+      "param": "dbagent",
       "hide": "data.p2.active"
     }
   ],
