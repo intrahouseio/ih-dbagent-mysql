@@ -11,7 +11,7 @@
 
 const util = require('util');
 const path = require('path');
-const { promises: fs } = require('fs');
+//const { promises: fs } = require('fs');
 
 const logger = require('./logger');
 const client = require('./lib/client');
