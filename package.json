@@ -1,10 +1,11 @@
 {
-  "name": "ih-dbagent-influx",
+  "name": "ih-dbagent-mysql",
   "version": "5.0.1",
-  "description": "Dbagent for MySQL, MariaDB",
+  "description": "Dbagent for Mysql",
   "main": "dbagent.js",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-schedule": "^1.3.2"
   },
   "devDependencies": {
     "mocha": "^4.1.0",

@@ -12,11 +12,10 @@ const path = require('path');
 const dbagent = require('./lib/index');
 const logger = require('./logger');
 
-
 // Извлечь имя log или писать в /var/log
 let opt;
 try {
-  opt = JSON.parse(process.argv[2]);
+  opt = JSON.parse(process.argv[2]); // dbPath property
 } catch (e) {
   opt = {};
 }
@@ -25,12 +24,24 @@ const logfile = opt.logfile || path.join(__dirname,'ih_mysql.log');
 const loglevel = opt.loglevel || 0;
 
 logger.start(logfile,loglevel);
-logger.log('Start dbagent mysql. Loglevel: '+loglevel);
+
+logger.log('Start dbagent mysql Options: ' + JSON.stringify(opt));
 
 delete opt.logfile;
 delete opt.loglevel;
 
+sendProcessInfo();
+setInterval(sendProcessInfo, 10000);
 dbagent(process, opt, logger);
+
+function sendProcessInfo() {
+  const mu = process.memoryUsage();
+  const memrss = Math.floor(mu.rss/1024);
+  const memheap = Math.floor(mu.heapTotal/1024);
+  const memhuse = Math.floor(mu.heapUsed/1024);
+
+  if (process.connected) process.send({type:'procinfo', data:{memrss,memheap, memhuse }});
+}
 
 
 
