@@ -1,6 +1,6 @@
 {
   "name": "ih-dbagent-mysql",
-  "version": "5.0.1",
+  "version": "5.0.6",
   "description": "Dbagent for Mysql",
   "main": "dbagent.js",
   "dependencies": {
