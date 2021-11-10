@@ -2,5 +2,5 @@
     "id":"mysql",
     "description":"Dbagent for Mysql",
     "cross":true,
-	"version":"5.0.6"
+	"version":"5.0.7"
 }
