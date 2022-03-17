@@ -17,7 +17,7 @@ const logger = require('./logger');
 const client = require('./lib/client');
 const utils = require('./lib/utils');
 
-const tableNames = ['mainlog', 'pluginlog', 'devicelog', 'authlog'];
+const tableNames = ['mainlog', 'pluginlog', 'devicelog'];
 
 let opt;
 try {
@@ -54,7 +54,7 @@ async function main(channel) {
     //await client.run('PRAGMA synchronous = NORMAL;');
 
     for (const name of tableNames) {
-      await client.createTable(getCreateTableStr(name), name);
+      await client.query(getCreateTableStr(name));
       await client.query('CREATE INDEX IF NOT EXISTS ' + name + '_ts ON ' + name + ' (tsid);');
     }
 
@@ -74,7 +74,7 @@ async function main(channel) {
     });
 
     process.on('exit', () => {
-      if (client && client.pool) client.pool.close();
+      if (client && client.pool) client.pool.end();
     });
   } catch (err) {
     processExit(1, err);
@@ -192,7 +192,7 @@ async function main(channel) {
     if (err) msg = 'ERROR: ' + utils.getShortErrStr(err) + ' ';
 
     if (client && client.pool) {
-      client.pool.close();
+      client.pool.end();
       client.pool = null;
       msg += 'Close connection pool.';
     }
@@ -205,12 +205,14 @@ async function main(channel) {
 
   async function sendDBSize() {
     if (!process.connected) return;
-    const data = {};
+    const data = {
+      size: 0
+    };
     const sqlQuery = "SELECT table_name AS 'Table', "+ 
     "ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'Size (MB)' "+
     "FROM information_schema.TABLES "+
-    "WHERE table_schema = '"+options.database+"' ORDER BY (data_length + index_length) DESC;"
-    logger.log("Sql" + sqlQuery);
+    "WHERE table_schema = '"+opt.database+"' ORDER BY (data_length + index_length) DESC;"
+    //logger.log("Sql" + sqlQuery);
     const dbSizeArr = await client.query(sqlQuery);
     
     dbSizeArr.forEach(element => {
@@ -252,13 +254,13 @@ function getCreateTableStr(tableName) {
   let result;
   switch (tableName) {
     case 'devicelog':
-      result = 'did TEXT,prop TEXT,val TEXT,txt TEXT, ts INTEGER NOT NULL,tsid TEXT,cmd TEXT,sender TEXT';
+      result = 'did TEXT,prop TEXT,val TEXT,txt TEXT, ts BIGINT NOT NULL,tsid TEXT,cmd TEXT,sender TEXT';
       break;
     case 'pluginlog':
-      result = 'unit TEXT, txt TEXT,level INTEGER, ts INTEGER NOT NULL, tsid TEXT, sender TEXT';
+      result = 'unit TEXT, txt TEXT,level INTEGER, ts BIGINT NOT NULL, tsid TEXT, sender TEXT';
       break;
     default:
-      result = 'tags TEXT, did TEXT, location TEXT, txt TEXT, level INTEGER, ts INTEGER NOT NULL,tsid TEXT,sender TEXT';
+      result = 'tags TEXT, did TEXT, location TEXT, txt TEXT, level INTEGER, ts BIGINT NOT NULL,tsid TEXT,sender TEXT';
   }
   return 'CREATE TABLE IF NOT EXISTS ' + tableName + ' (' + result + ')';
 }
