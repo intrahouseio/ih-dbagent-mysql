@@ -50,9 +50,6 @@ async function main(channel) {
     await client.createPoolToDatabase(opt, logger);
     if (!client.pool) throw { message: 'Client creation Failed!' };
 
-    //await client.run('PRAGMA journal_mode = WAL;');
-    //await client.run('PRAGMA synchronous = NORMAL;');
-
     for (const name of tableNames) {
       await client.query(getCreateTableStr(name));
       await client.query('CREATE INDEX IF NOT EXISTS ' + name + '_ts ON ' + name + ' (tsid);');
